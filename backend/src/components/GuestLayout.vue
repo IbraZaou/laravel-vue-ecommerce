@@ -1,11 +1,8 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-
 const { title } = defineProps({
     title: String
 })
 
-const emit = defineEmits(['submit'])
 </script>
 
 
@@ -18,7 +15,7 @@ const emit = defineEmits(['submit'])
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" @submit.prevent="emit('submit')" method="POST">
+            <form class="space-y-6" method="POST">
                 <slot></slot>
             </form>
         </div>
