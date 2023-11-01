@@ -1,20 +1,12 @@
-<script>
+<script setup>
 import { RouterLink } from 'vue-router';
+import GuestLayout from '../components/GuestLayout.vue';
 
-export default {
-    name: "Login",
-    components: { RouterLink }
-}
 </script>
 
 
 <template>
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Request new password
-            </h2>
-        </div>
-
+    <GuestLayout title="Request new password" @submit="login">
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" action="#" method="POST">
                 <div>
@@ -40,7 +32,7 @@ export default {
                 </div>
             </form>
         </div>
-    </div>
+    </GuestLayout>
 </template>
 
 
