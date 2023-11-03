@@ -35,6 +35,23 @@ const user = {
 
 <template>
     <GuestLayout title="Sign in to your account" method="POST" @submit.prevent="login">
+
+        <div v-if="errorMsg" class="flex items-center justify-between py-3 px-5 bg-red-500 text-white rounded">
+            {{ errorMsg }}
+
+            <span @click="errorMsg = ''"
+                class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-black/20">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+
+            </span>
+
+        </div>
+
+
+
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <div>
                 <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
@@ -57,8 +74,27 @@ const user = {
 
 
             <div>
-                <button type="submit"
-                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign
+
+                <!-- quand je vais cliquer sur sign in cela va mettre un petit temps de loading ou ne pourra pas cliquer sur le bouton a nouveau -->
+
+                <button type="submit" :disabled="loading"
+                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    :class="{
+                        'cursor-not-allowed': loading,
+                        'hover:bg-indigo-500': loading
+                    }">
+
+                    <!-- v-if le loading est true on va lancer le svg spinner, quand je click ca va lancer l'animation si il n'y pas ce que code le svg ce lancera de façon continue -->
+
+                    <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+
+                    Sign
                     in</button>
             </div>
 
@@ -77,6 +113,6 @@ const user = {
         </div>
     </GuestLayout>
 </template>
-
-
+    
+    
 <style scoped></style>

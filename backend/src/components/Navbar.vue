@@ -5,9 +5,11 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
 import store from '../store';
 import router from '../router';
+import { computed } from "vue";
 
 
 const emit = defineEmits(['toggle-sidebar'])
+const currentUser = computed(() => store.state.user.data);
 
 function logout() {
     store.dispatch('logout')
@@ -15,6 +17,7 @@ function logout() {
             router.push({ name: 'login' })
         })
 }
+
 
 
 </script>
@@ -33,7 +36,7 @@ function logout() {
                 <div>
                     <MenuButton class="flex items-center">
                         <img src="https://randomuser.me/api/portraits/women/72.jpg" class="w-8 rounded-full mr-2">
-                        <small>Isabella Dawson</small>
+                        <small>{{ currentUser.name }}</small>
                         <ChevronDownIcon class="h-5 w-5 text-violet-200 hover:text-violet-100" aria-hidden="true" />
                     </MenuButton>
                 </div>
