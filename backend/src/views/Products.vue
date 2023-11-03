@@ -2,8 +2,10 @@
 import { processIf } from '@vue/compiler-core';
 import { ref, computed, onMounted } from 'vue';
 import store from '../store';
+import Spinner from '../components/Spinner.vue';
+import { PRODUCTS_PER_PAGE } from '../constants.js';
 
-const perPage = ref(10)
+const perPage = ref(PRODUCTS_PER_PAGE)
 const search = ref('')
 const products = computed(() => store.state.products)
 
@@ -11,8 +13,15 @@ onMounted(() => {
     getProducts();
 })
 
-function getProducts() {
-    store.dispatch('getProducts')
+function getProducts(url = null) {
+    store.dispatch('getProducts', { url })
+}
+
+function getForPage(ev, link) {
+    if (!link.url || link.active) {
+        return
+    }
+    getProducts(link.url)
 }
 
 </script>
@@ -66,7 +75,7 @@ function getProducts() {
                     <tr v-for="product of products.data">
                         <td class="border-b p-2">{{ product.id }}</td>
                         <td class="border-b p-2">
-                            <img :src="product.image" class="w-16" :alt="product.title">
+                            <img :src="product.image" class="w-16">
                         </td>
                         <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{
                             product.title }}</td>
@@ -80,6 +89,29 @@ function getProducts() {
                     </tr>
                 </tbody>
             </table>
+
+            <div class="flex justify-between items-center mt-5">
+                <span>
+                    Showing from {{ products.from }} to {{ products.to }}
+                </span>
+                <nav v-if="products.total > products.limit"
+                    class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
+                    aria-label="Pagination">
+                    <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
+                    <a v-for="(link, i) of products.links" :key="i" :disabled="!link.url" href="#"
+                        @click.prevent="getForPage($event, link)" aria-current="page"
+                        class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
+                        :class="[
+                            link.active
+                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+                            i === 0 ? 'rounded-l-md' : '',
+                            i === products.links.length - 1 ? 'rounded-r-md' : '',
+                            !link.url ? ' bg-gray-100 text-gray-700' : ''
+                        ]" v-html="link.label">
+                    </a>
+                </nav>
+            </div>
         </template>
 
 
